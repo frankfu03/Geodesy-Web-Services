@@ -130,12 +130,12 @@ public class CorsSiteService implements EventSubscriber<SiteLogReceived> {
         Comparator<Instant> fromC = ComparatorUtils.nullLowComparator(ComparatorUtils.NATURAL_COMPARATOR);
         SortedSet<Instant> datesOfChange = new TreeSet<>(fromC);
 
-        List<EquipmentLogItem> equipmentLogItems = siteLog.getEquipmentLogItems()
+        List<EquipmentLogItem<?>> equipmentLogItems = siteLog.getEquipmentLogItems()
             .stream()
             .filter(logItem -> logItem.getDateDeleted() == null)
             .collect(Collectors.toList());
 
-        for (EquipmentLogItem logItem : equipmentLogItems) {
+        for (EquipmentLogItem<?> logItem : equipmentLogItems) {
             EffectiveDates dates = logItem.getEffectiveDates();
             if (dates != null) {
                 if (dates.getFrom() != null) {
@@ -171,13 +171,13 @@ public class CorsSiteService implements EventSubscriber<SiteLogReceived> {
                 }
             }
         }
-        for (EquipmentLogItem logItem : equipmentLogItems) {
+        for (EquipmentLogItem<?> logItem : equipmentLogItems) {
             addEquipment(logItem, setups);
         }
         return setups;
     }
 
-    private void addEquipment(EquipmentLogItem logItem, List<Setup> setups) {
+    private void addEquipment(EquipmentLogItem<?> logItem, List<Setup> setups) {
         EffectiveDates period = logItem.getEffectiveDates();
         Instant equipmentFrom = null;
         Instant equipmentTo = null;
@@ -223,7 +223,7 @@ public class CorsSiteService implements EventSubscriber<SiteLogReceived> {
         }
     }
 
-    private void addEquipment(EquipmentLogItem logItem, Setup s) {
+    private void addEquipment(EquipmentLogItem<?> logItem, Setup s) {
         Pair<? extends Equipment, ? extends EquipmentConfiguration> ec = equipmentFactory.create(logItem);
         Equipment equipment = ec.getLeft();
         EquipmentConfiguration config = ec.getRight();
