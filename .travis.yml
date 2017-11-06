@@ -6,6 +6,7 @@ branches:
   only:
   - master
   - next
+  - release-0.2.0
 cache:
   timeout: 86400
   directories:
