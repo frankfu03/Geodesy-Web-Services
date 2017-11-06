@@ -466,8 +466,8 @@ public class SiteLog {
         ).collect(Collectors.toList());
     }
 
-    public List<EquipmentLogItem> getEquipmentLogItems() {
-        List<EquipmentLogItem> equipment = new ArrayList<EquipmentLogItem>();
+    public List<EquipmentLogItem<?>> getEquipmentLogItems() {
+        List<EquipmentLogItem<?>> equipment = new ArrayList<EquipmentLogItem<?>>();
         equipment.addAll(getGnssReceivers());
         equipment.addAll(getGnssAntennas());
         equipment.addAll(getHumiditySensors());
