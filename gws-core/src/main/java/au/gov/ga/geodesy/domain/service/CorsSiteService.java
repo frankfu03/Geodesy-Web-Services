@@ -105,9 +105,6 @@ public class CorsSiteService implements EventSubscriber<SiteLogReceived> {
         corsSites.saveAndFlush(corsSite);
 
         List<Setup> newSetups = getSetups(corsSite.getId(), siteLog);
-        for (Setup s : newSetups) {
-            s.setSiteId(corsSite.getId());
-        }
         List<Setup> oldSetups = setups.findBySiteId(corsSite.getId());
         @SuppressWarnings("unchecked")
         List<Setup> commonSetups = ListUtils.intersection(oldSetups, newSetups);
