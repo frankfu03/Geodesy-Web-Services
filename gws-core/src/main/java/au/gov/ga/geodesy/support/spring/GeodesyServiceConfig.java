@@ -18,6 +18,7 @@ import au.gov.ga.geodesy.port.adapter.sns.SnsNotificationAdapter;
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = {
+    "au.gov.ga.geodesy.domain.model",
     "au.gov.ga.geodesy.domain.service",
     "au.gov.ga.geodesy.domain.model.equipment",
     "au.gov.ga.geodesy.port.adapter.sopac",
