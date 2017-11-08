@@ -29,6 +29,7 @@ import au.gov.ga.geodesy.domain.model.Node;
 import au.gov.ga.geodesy.domain.model.NodeRepository;
 import au.gov.ga.geodesy.domain.model.Setup;
 import au.gov.ga.geodesy.domain.model.SetupRepository;
+import au.gov.ga.geodesy.domain.model.SetupType;
 import au.gov.ga.geodesy.domain.model.equipment.Clock;
 import au.gov.ga.geodesy.domain.model.equipment.Equipment;
 import au.gov.ga.geodesy.domain.model.equipment.EquipmentRepository;
@@ -84,7 +85,7 @@ public class NodeService implements EventSubscriber<SiteUpdated> {
         CorsSite site = gnssCorsSites.findByFourCharacterId(fourCharId);
         EffectiveDates nodePeriod = null;
 
-        setups.findInvalidatedBySiteId(site.getId())
+        setups.findInvalidatedBySiteId(site.getId(), SetupType.CorsSetup)
             .stream()
             .map(s -> nodes.findBySetupId(s.getId()))
             .filter(Objects::nonNull)
@@ -94,7 +95,7 @@ public class NodeService implements EventSubscriber<SiteUpdated> {
                 log.info("Invalidated node " + n.getId());
             });
 
-        for (final Setup setup : setups.findBySiteId(site.getId())) {
+        for (final Setup setup : setups.findBySiteId(site.getId(), SetupType.CorsSetup)) {
             if (nodePeriod != null) {
                 Instant nodeEffectiveTo = nodePeriod.getTo();
                 if (nodeEffectiveTo == null) {

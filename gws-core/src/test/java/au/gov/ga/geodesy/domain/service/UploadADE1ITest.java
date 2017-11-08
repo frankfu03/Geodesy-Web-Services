@@ -16,6 +16,7 @@ import au.gov.ga.geodesy.domain.model.Node;
 import au.gov.ga.geodesy.domain.model.NodeRepository;
 import au.gov.ga.geodesy.domain.model.Setup;
 import au.gov.ga.geodesy.domain.model.SetupRepository;
+import au.gov.ga.geodesy.domain.model.SetupType;
 import au.gov.ga.geodesy.domain.model.sitelog.SiteIdentification;
 import au.gov.ga.geodesy.domain.model.sitelog.SiteLog;
 import au.gov.ga.geodesy.domain.model.sitelog.SiteLogRepository;
@@ -62,7 +63,7 @@ public class UploadADE1ITest extends IntegrationTest {
         assertThat(site.getName(), equalTo(identification.getSiteName()));
         assertThat(site.getDateInstalled(), equalTo(identification.getDateInstalled()));
 
-        List<Setup> setups = setupRepo.findBySiteId(site.getId());
+        List<Setup> setups = setupRepo.findBySiteId(site.getId(), SetupType.CorsSetup);
         assertThat(setups.size(), equalTo(6));
 
         List<Node> nodes = nodeRepo.findBySiteId(site.getId());

@@ -60,4 +60,6 @@
     <include file="db/cors-site-added-to-network.xml"/>
     <include file="db/add-username-to-event.xml"/>
     <include file="db/add-sitelog-last-modified-date.xml"/>
+    <include file="db/rename-setup-name-column.xml"/>
+    <include file="db/rename-cors-setup-type.sql"/>
 </databaseChangeLog>
