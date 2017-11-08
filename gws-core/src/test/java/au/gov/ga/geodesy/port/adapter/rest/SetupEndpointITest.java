@@ -53,7 +53,7 @@ public class SetupEndpointITest extends IntegrationTest {
     @Test(dependsOnMethods = {"upload"})
     @Rollback(false)
     public void testFindByFourCharacterId() throws Exception {
-        int expectedTotalElements = 21;
+        int expectedTotalElements = 20;
         mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=CorsSetup&size=" + expectedTotalElements))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.page.totalElements").value(expectedTotalElements))
