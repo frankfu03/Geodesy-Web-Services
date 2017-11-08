@@ -61,6 +61,7 @@ public class SetupRepositoryITest extends IntegrationTest {
     public void findSetupsEffectiveWithinOpenPeriod() {
         List<Setup> result = toList(setups.findBySiteIdAndPeriod(
             siteId,
+            SetupType.CorsSetup,
             null, null,
             maximumPageRequest));
 
@@ -72,6 +73,7 @@ public class SetupRepositoryITest extends IntegrationTest {
     public void findSetupsEffectiveWithinPeriod() {
         List<Setup> result = toList(setups.findBySiteIdAndPeriod(
             siteId,
+            SetupType.CorsSetup,
             parse("2001-12-12"), parse("2010-05-05"),
             maximumPageRequest));
 
@@ -83,6 +85,7 @@ public class SetupRepositoryITest extends IntegrationTest {
     public void findSetupsEffectiveBeforeSpecificTime() {
         List<Setup> result = toList(setups.findBySiteIdAndPeriod(
             siteId,
+            SetupType.CorsSetup,
             null, parse("2010-05-05"),
             maximumPageRequest));
 
@@ -94,6 +97,7 @@ public class SetupRepositoryITest extends IntegrationTest {
     public void findSetupsEffectiveAfterSpecificTime() {
         List<Setup> result = toList(setups.findBySiteIdAndPeriod(
             sites.findByFourCharacterId("ALIC").getId(),
+            SetupType.CorsSetup,
             parse("2010-05-05"), null,
             maximumPageRequest));
 

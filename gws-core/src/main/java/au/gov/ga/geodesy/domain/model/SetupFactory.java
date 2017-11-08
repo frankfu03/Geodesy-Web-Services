@@ -3,6 +3,7 @@ package au.gov.ga.geodesy.domain.model;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
@@ -29,8 +30,6 @@ import au.gov.ga.geodesy.domain.model.sitelog.SiteLog;
 @Component
 public class SetupFactory {
 
-    private static final String gnssCorsSetupName = "GNSS CORS Setup";
-
     @Autowired
     private EquipmentRepository equipmentRepository;
 
@@ -41,15 +40,38 @@ public class SetupFactory {
     private EquipmentFactory equipmentFactory;
 
     /**
-     * Create setups from site log.
+     * Extract setups from site log. Setup types are defined in
+     * {@code SetupType}.
+     *
+     * @param siteId site to associate with the new setups
+     * @param siteLog site log from which to extract setups
+     * @return list of setups hashed by setup type
+     *
+     * @see SetupType
      */
-    public List<Setup> createSetups(Integer siteId, SiteLog siteLog) {
+    public HashMap<SetupType, List<Setup>> createSetups(Integer siteId, SiteLog siteLog) {
+        HashMap<SetupType, List<Setup>> setups = new HashMap<>();
+        for (SetupType setupType : SetupType.values()) {
+            setups.put(setupType, this.createSetups(siteId, siteLog, setupType));
+        }
+        return setups;
+    }
+
+    private List<Setup> createSetups(Integer siteId, SiteLog siteLog, SetupType setupType) {
         @SuppressWarnings("unchecked")
         Comparator<Instant> fromC = ComparatorUtils.nullLowComparator(ComparatorUtils.NATURAL_COMPARATOR);
         SortedSet<Instant> datesOfChange = new TreeSet<>(fromC);
 
         List<EquipmentLogItem<?>> equipmentLogItems = (List<EquipmentLogItem<?>>) siteLog.getEquipmentLogItems()
             .stream()
+            .filter(logItem -> {
+                for (Class<?> equipmentType : setupType.equipmentTypes) {
+                    if (equipmentType.isAssignableFrom(logItem.getClass())) {
+                        return true;
+                    }
+                }
+                return false;
+            })
             .filter(logItem -> logItem.getDateDeleted() == null)
             .collect(Collectors.toList());
 
@@ -69,7 +91,7 @@ public class SetupFactory {
         if (datesOfChange.size() > 0) {
             if (datesOfChange.size() == 1) {
                 Instant d = datesOfChange.iterator().next();
-                setups.add(new Setup(siteId, gnssCorsSetupName, new EffectiveDates(d, null)));
+                setups.add(new Setup(siteId, setupType, new EffectiveDates(d, null)));
             } else {
                 Iterator<Instant> i = datesOfChange.iterator();
                 Iterator<Instant> j = datesOfChange.iterator();
@@ -78,13 +100,13 @@ public class SetupFactory {
                 do {
                     Instant from = i.next();
                     Instant to = j.next();
-                    s = new Setup(siteId, gnssCorsSetupName, new EffectiveDates(from, to));
+                    s = new Setup(siteId, setupType, new EffectiveDates(from, to));
                     setups.add(s);
                 }
                 while (j.hasNext());
                 EffectiveDates lastPeriod = s.getEffectivePeriod();
                 if (lastPeriod.getTo() != null) {
-                    s = new Setup(siteId, gnssCorsSetupName, new EffectiveDates(lastPeriod.getTo(), null));
+                    s = new Setup(siteId, setupType, new EffectiveDates(lastPeriod.getTo(), null));
                     setups.add(s);
                 }
             }

@@ -33,7 +33,7 @@ public class SetupEndpointITest extends IntegrationTest {
     @Test(dependsOnMethods = {"upload"})
     @Rollback(false)
     public void testFindCurrentByFourCharacterId() throws Exception {
-        mvc.perform(get("/setups/search/findCurrentByFourCharacterId?id=ALIC"))
+        mvc.perform(get("/setups/search/findCurrentByFourCharacterId?id=ALIC&type=CorsSetup"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$._links.self").isNotEmpty())
             .andDo(document("findCurrentByFourCharacterId"));
@@ -42,7 +42,7 @@ public class SetupEndpointITest extends IntegrationTest {
     @Test(dependsOnMethods = {"upload"})
     @Rollback(false)
     public void testFindByFourCharacterIdAndDate() throws Exception {
-        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&effectiveFrom=2011-12-12&effectiveTo=2014-12-12&timeFormat=uuuu-MM-dd"))
+        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=CorsSetup&effectiveFrom=2011-12-12&effectiveTo=2014-12-12&timeFormat=uuuu-MM-dd"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.page.totalElements").value(3))
             .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.from").value("2011-07-20T00:00:00Z"))
@@ -54,7 +54,7 @@ public class SetupEndpointITest extends IntegrationTest {
     @Rollback(false)
     public void testFindByFourCharacterId() throws Exception {
         int expectedTotalElements = 21;
-        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&size=" + expectedTotalElements))
+        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=CorsSetup&size=" + expectedTotalElements))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.page.totalElements").value(expectedTotalElements))
             .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.from").value("1994-05-15T00:00:00Z"))
