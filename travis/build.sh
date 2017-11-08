@@ -25,8 +25,8 @@ if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
     # zip bundle to $TMPDIR.
     export TMPDIR=/tmp
     case "${TRAVIS_BRANCH}" in
-        "next")
-            ./aws/codedeploy-WebServices/deploy.sh dev
+        "release-0.2.0")
+            ./aws/codedeploy-WebServices/deploy.sh test
         ;;
         "master")
             ./aws/codedeploy-WebServices/deploy.sh test
