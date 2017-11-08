@@ -18,7 +18,9 @@ public enum SetupType {
         GnssAntennaLogItem.class,
         GnssReceiverLogItem.class,
         FrequencyStandardLogItem.class
-    );
+    ),
+
+    GnssAntennaSetup(GnssAntennaLogItem.class);
 
     public final List<Class<? extends EquipmentLogItem<?>>> equipmentTypes;
 

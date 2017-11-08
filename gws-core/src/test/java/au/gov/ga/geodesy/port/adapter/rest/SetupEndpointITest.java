@@ -33,8 +33,19 @@ public class SetupEndpointITest extends IntegrationTest {
     @Test(dependsOnMethods = {"upload"})
     @Rollback(false)
     public void testFindCurrentByFourCharacterId() throws Exception {
+        // find current CORS setup
         mvc.perform(get("/setups/search/findCurrentByFourCharacterId?id=ALIC&type=CorsSetup"))
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.effectivePeriod.from").value("2013-07-08T00:45:00Z"))
+            .andExpect(jsonPath("$.effectivePeriod.to").value(nullValue()))
+            .andExpect(jsonPath("$._links.self").isNotEmpty())
+            .andDo(document("findCurrentByFourCharacterId"));
+
+        // find current GNSS antenna setup
+        mvc.perform(get("/setups/search/findCurrentByFourCharacterId?id=ALIC&type=GnssAntennaSetup"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.effectivePeriod.from").value("2011-07-20T00:00:00Z"))
+            .andExpect(jsonPath("$.effectivePeriod.to").value(nullValue()))
             .andExpect(jsonPath("$._links.self").isNotEmpty())
             .andDo(document("findCurrentByFourCharacterId"));
     }
@@ -42,23 +53,41 @@ public class SetupEndpointITest extends IntegrationTest {
     @Test(dependsOnMethods = {"upload"})
     @Rollback(false)
     public void testFindByFourCharacterIdAndDate() throws Exception {
+        // find CORS setups
         mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=CorsSetup&effectiveFrom=2011-12-12&effectiveTo=2014-12-12&timeFormat=uuuu-MM-dd"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.page.totalElements").value(3))
             .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.from").value("2011-07-20T00:00:00Z"))
             .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.to").value("2013-03-08T00:00:00Z"))
             .andExpect(jsonPath("$._embedded.setups[0]._links.self").isNotEmpty());
+
+        // find GNSS antenna setups
+        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=GnssAntennaSetup&effectiveFrom=2011-12-12&effectiveTo=2014-12-12&timeFormat=uuuu-MM-dd"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page.totalElements").value(1))
+            .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.from").value("2011-07-20T00:00:00Z"))
+            .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.to").value(nullValue()))
+            .andExpect(jsonPath("$._embedded.setups[0]._links.self").isNotEmpty());
+
     }
 
     @Test(dependsOnMethods = {"upload"})
     @Rollback(false)
     public void testFindByFourCharacterId() throws Exception {
-        int expectedTotalElements = 20;
-        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=CorsSetup&size=" + expectedTotalElements))
+        int expectedCorsSetups = 20;
+        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=CorsSetup&size=" + expectedCorsSetups))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.page.totalElements").value(expectedTotalElements))
+            .andExpect(jsonPath("$.page.totalElements").value(expectedCorsSetups))
             .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.from").value("1994-05-15T00:00:00Z"))
             .andExpect(jsonPath("$._embedded.setups[0]._links.self").isNotEmpty())
-            .andExpect(jsonPath("$._embedded.setups[" + (expectedTotalElements - 1) + "].effectivePeriod.to").value(nullValue()));
+            .andExpect(jsonPath("$._embedded.setups[" + (expectedCorsSetups - 1) + "].effectivePeriod.to").value(nullValue()));
+
+        int expectedGnssAntennaSetups = 3;
+        mvc.perform(get("/setups/search/findByFourCharacterId?id=ALIC&type=GnssAntennaSetup&size=" + expectedGnssAntennaSetups))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page.totalElements").value(expectedGnssAntennaSetups))
+            .andExpect(jsonPath("$._embedded.setups[0].effectivePeriod.from").value("1994-05-15T00:00:00Z"))
+            .andExpect(jsonPath("$._embedded.setups[0]._links.self").isNotEmpty())
+            .andExpect(jsonPath("$._embedded.setups[" + (expectedGnssAntennaSetups- 1) + "].effectivePeriod.to").value(nullValue()));
     }
 }
