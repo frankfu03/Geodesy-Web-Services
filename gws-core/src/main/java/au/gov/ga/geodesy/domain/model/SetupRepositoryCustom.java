@@ -13,10 +13,10 @@ public interface SetupRepositoryCustom {
     /**
      * Find the Setup currently in effect at a Site.
      */
-    Setup findCurrentBySiteId(Integer siteId);
+    Setup findCurrentBySiteId(Integer siteId, SetupType type);
 
     /**
      * Find all Setups at a Site for a period of interest.
      */
-    Page<Setup> findBySiteIdAndPeriod(Integer siteId, Instant periodStart, Instant periodEnd, Pageable pageRequest);
+    Page<Setup> findBySiteIdAndPeriod(Integer siteId, SetupType type, Instant periodStart, Instant periodEnd, Pageable pageRequest);
 }

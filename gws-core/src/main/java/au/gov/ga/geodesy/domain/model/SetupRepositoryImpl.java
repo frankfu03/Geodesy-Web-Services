@@ -30,13 +30,14 @@ public class SetupRepositoryImpl implements SetupRepositoryCustom {
      * {@inheritDoc}
      */
     @Override
-    public Setup findCurrentBySiteId(Integer siteId) {
+    public Setup findCurrentBySiteId(Integer siteId, SetupType type) {
         // TODO: use query-dsl
         String queryString =
-            "select s from Setup s where s.siteId = :id and s.effectivePeriod.to is null and s.invalidated = false";
+            "select s from Setup s where s.type = :type and s.siteId = :id and s.effectivePeriod.to is null and s.invalidated = false";
 
         TypedQuery<Setup> query = entityManager.createQuery(queryString, Setup.class);
         query.setParameter("id", siteId);
+        query.setParameter("type", type);
         return query.getSingleResult();
     }
 
@@ -46,11 +47,13 @@ public class SetupRepositoryImpl implements SetupRepositoryCustom {
     @Override
     public Page<Setup> findBySiteIdAndPeriod(
             Integer siteId,
+            SetupType type,
             @Nullable Instant periodStart,
             @Nullable Instant periodEnd,
             Pageable pageReuest) {
 
         QSetup qsetup = QSetup.setup;
+
         BooleanExpression isValid = qsetup.invalidated.isFalse();
 
         BooleanBuilder isContained = new BooleanBuilder();
@@ -72,6 +75,7 @@ public class SetupRepositoryImpl implements SetupRepositoryCustom {
         Predicate isIntercepted = isInterceptedByPeriodStart.or(isInterceptedByPeriodEnd.getValue()).getValue();
 
         Predicate requiredSetupPredicate = qsetup.siteId.eq(siteId)
+            .and(qsetup.type.eq(type))
             .and(isValid)
             .and(isContained.or(isIntercepted));
 

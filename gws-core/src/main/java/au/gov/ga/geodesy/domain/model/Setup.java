@@ -9,6 +9,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -41,8 +43,9 @@ public class Setup {
     @Column(name = "SITE_ID", nullable = false)
     private Integer siteId;
 
-    @Column(name = "NAME", nullable = false)
-    private String name;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SetupType type;
 
     @NotNull
     @Embedded
@@ -59,9 +62,9 @@ public class Setup {
     private Setup() {
     }
 
-    public Setup(Integer siteId, String name, EffectiveDates effectivePeriod) {
+    public Setup(Integer siteId, SetupType type, EffectiveDates effectivePeriod) {
         this.siteId = siteId;
-        this.name = name;
+        this.type = type;
         this.effectivePeriod = effectivePeriod;
     }
 
@@ -77,8 +80,8 @@ public class Setup {
         this.siteId = siteId;
     }
 
-    public String getName() {
-        return name;
+    public SetupType getType() {
+        return type;
     }
 
     public EffectiveDates getEffectivePeriod() {
@@ -119,7 +122,7 @@ public class Setup {
         Setup other = (Setup) x;
         return new EqualsBuilder()
             .append(siteId, other.getSiteId())
-            .append(name, other.getName())
+            .append(type, other.getType())
             .append(getEffectivePeriod(), other.getEffectivePeriod())
             .isEquals()
             &&
@@ -152,7 +155,7 @@ public class Setup {
     public int hashCode() {
         return new HashCodeBuilder(19, 41).
             append(siteId).
-            append(name).
+            append(type).
             append(effectivePeriod).
             append(equipmentInUse).
             toHashCode();

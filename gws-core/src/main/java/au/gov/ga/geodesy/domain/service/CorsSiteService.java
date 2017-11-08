@@ -1,6 +1,8 @@
 package au.gov.ga.geodesy.domain.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -17,6 +19,7 @@ import au.gov.ga.geodesy.domain.model.Monument;
 import au.gov.ga.geodesy.domain.model.Setup;
 import au.gov.ga.geodesy.domain.model.SetupFactory;
 import au.gov.ga.geodesy.domain.model.SetupRepository;
+import au.gov.ga.geodesy.domain.model.SetupType;
 import au.gov.ga.geodesy.domain.model.event.Event;
 import au.gov.ga.geodesy.domain.model.event.EventPublisher;
 import au.gov.ga.geodesy.domain.model.event.EventSubscriber;
@@ -62,10 +65,9 @@ public class CorsSiteService implements EventSubscriber<SiteLogReceived> {
         String fourCharacterId = siteLogReceived.getFourCharacterId();
         SiteLog siteLog = siteLogs.findByFourCharacterId(fourCharacterId);
 
-        CorsSite corsSite = corsSites.findByFourCharacterId(fourCharacterId);
-        if (corsSite == null) {
-            corsSite = new CorsSite(fourCharacterId);
-        }
+        CorsSite corsSite = Optional.ofNullable(corsSites.findByFourCharacterId(fourCharacterId))
+            .orElse(new CorsSite(fourCharacterId));
+
         corsSite.setName(siteLog.getSiteIdentification().getSiteName());
 
         SiteIdentification siteId = siteLog.getSiteIdentification();
@@ -81,20 +83,22 @@ public class CorsSiteService implements EventSubscriber<SiteLogReceived> {
 
         corsSites.saveAndFlush(corsSite);
 
-        List<Setup> newSetups = setupFactory.createSetups(corsSite.getId(), siteLog);
-        List<Setup> oldSetups = setups.findBySiteId(corsSite.getId());
-        @SuppressWarnings("unchecked")
-        List<Setup> commonSetups = ListUtils.intersection(oldSetups, newSetups);
-        newSetups.removeAll(commonSetups);
-        oldSetups.removeAll(commonSetups);
+        HashMap<SetupType, List<Setup>> setupsByType = setupFactory.createSetups(corsSite.getId(), siteLog);
+        setupsByType.forEach((setupType, newSetups) -> {
+            List<Setup> oldSetups = setups.findBySiteId(corsSite.getId(), setupType);
+            @SuppressWarnings("unchecked")
+            List<Setup> commonSetups = ListUtils.intersection(oldSetups, newSetups);
+            newSetups.removeAll(commonSetups);
+            oldSetups.removeAll(commonSetups);
 
-        oldSetups.forEach(s -> {
-                s.invalidate();
-                log.info("Invalidated site : " + s.getId());
-            });
+            oldSetups.forEach(s -> {
+                    s.invalidate();
+                    log.info("Invalidated site : " + s.getId());
+                });
 
-        setups.save(oldSetups);
-        setups.save(newSetups);
+            setups.save(oldSetups);
+            setups.save(newSetups);
+        });
 
         eventPublisher.handled(siteLogReceived);
         eventPublisher.publish(new SiteUpdated(fourCharacterId));

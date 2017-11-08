@@ -27,6 +27,7 @@ import au.gov.ga.geodesy.domain.model.CorsSite;
 import au.gov.ga.geodesy.domain.model.CorsSiteRepository;
 import au.gov.ga.geodesy.domain.model.Setup;
 import au.gov.ga.geodesy.domain.model.SetupRepository;
+import au.gov.ga.geodesy.domain.model.SetupType;
 import au.gov.ga.geodesy.support.utils.GMLDateUtils;
 
 @RepositoryRestController
@@ -49,6 +50,7 @@ public class SetupEndpoint {
 
     public ResponseEntity<PagedResources<Resource<Setup>>> findByFourCharacterId(
             @RequestParam("id") String fourCharId,
+            @RequestParam("type") SetupType type,
             @RequestParam(required = false) String effectiveFrom,
             @RequestParam(required = false) String effectiveTo,
             @RequestParam(defaultValue = "uuuu-MM-dd") String timeFormat,
@@ -59,7 +61,9 @@ public class SetupEndpoint {
         CorsSite site = sites.findByFourCharacterId(fourCharId);
 
         if (site != null) {
-            page = setups.findBySiteIdAndPeriod(site.getId(),
+            page = setups.findBySiteIdAndPeriod(
+                site.getId(),
+                type,
                 parse(effectiveFrom, timeFormat),
                 parse(effectiveTo, timeFormat),
                 pageRequest);
@@ -86,13 +90,14 @@ public class SetupEndpoint {
     @Transactional("geodesyTransactionManager")
     public ResponseEntity<PersistentEntityResource> findCurrentByFourCharacterId(
             @RequestParam("id") String fourCharId,
+            @RequestParam("type") SetupType type,
             PersistentEntityResourceAssembler assembler) {
 
         CorsSite site = sites.findByFourCharacterId(fourCharId);
         if (site == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Setup setup = setups.findCurrentBySiteId(site.getId());
+        Setup setup = setups.findCurrentBySiteId(site.getId(), type);
         if (setup == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
