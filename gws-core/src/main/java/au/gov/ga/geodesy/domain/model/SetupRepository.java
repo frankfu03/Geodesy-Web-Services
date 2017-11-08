@@ -17,7 +17,7 @@ public interface SetupRepository extends AggregateRepository<Setup>, SetupReposi
     @Query("select s from Setup s where s.siteId = :siteId and s.type = :type and s.invalidated = false")
     Page<Setup> findBySiteId(@Param("siteId") Integer id, @Param("type") SetupType type, Pageable pageRequest);
 
-    @RestResource(exported = true)
+    @RestResource(exported = false)
     @Query("select s from Setup s where s.siteId = :siteId and s.type = :type and s.invalidated = false")
     List<Setup> findBySiteId(@Param("siteId") Integer id, @Param("type") SetupType type);
 
