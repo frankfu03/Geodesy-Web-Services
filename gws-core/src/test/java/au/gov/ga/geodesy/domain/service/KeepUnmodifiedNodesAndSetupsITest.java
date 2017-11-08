@@ -82,7 +82,7 @@ public class KeepUnmodifiedNodesAndSetupsITest extends IntegrationTest {
     @Rollback(false)
     public void checkSetupId() throws Exception {
         assertThat(sites.count(), equalTo(1L));
-        assertThat(setups.count(), equalTo(1L));
+        assertThat(setups.count(), equalTo(2L));
         assertThat(nodes.count(), equalTo(1L));
         assertThat(equipment.count(), equalTo(3L));
     }
