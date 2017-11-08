@@ -8,7 +8,6 @@ import au.gov.ga.geodesy.domain.model.sitelog.EquipmentLogItem;
 import au.gov.ga.geodesy.domain.model.sitelog.FrequencyStandardLogItem;
 import au.gov.ga.geodesy.domain.model.sitelog.GnssAntennaLogItem;
 import au.gov.ga.geodesy.domain.model.sitelog.GnssReceiverLogItem;
-import au.gov.ga.geodesy.domain.model.sitelog.HumiditySensorLogItem;
 
 /**
  * List of equipment setup types.
@@ -18,8 +17,7 @@ public enum SetupType {
     CorsSetup(
         GnssAntennaLogItem.class,
         GnssReceiverLogItem.class,
-        FrequencyStandardLogItem.class,
-        HumiditySensorLogItem.class
+        FrequencyStandardLogItem.class
     );
 
     public final List<Class<? extends EquipmentLogItem<?>>> equipmentTypes;
