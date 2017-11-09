@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.config.EnableEntityLinks;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.util.ResourceUtils;
 
 import au.gov.ga.geodesy.port.adapter.geodesyml.GeodesyMLValidator;
@@ -19,6 +20,7 @@ import au.gov.ga.geodesy.port.adapter.geodesyml.GeodesyMLValidator;
  */
 @Configuration
 @EnableEntityLinks
+@EnableAsync
 @ComponentScan(basePackages = {
         "au.gov.ga.geodesy.java.util.service",
 })

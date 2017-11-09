@@ -7,6 +7,7 @@ import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +52,7 @@ public class SetupService {
     /**
      * Update equipment setups for all CORS sites.
      */
+    @Async
     public void updateSetups() {
         this.deleteSetups();
         this.createSetups();
