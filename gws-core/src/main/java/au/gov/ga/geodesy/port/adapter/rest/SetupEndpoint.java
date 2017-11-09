@@ -17,6 +17,7 @@ import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,7 @@ import au.gov.ga.geodesy.domain.model.CorsSiteRepository;
 import au.gov.ga.geodesy.domain.model.Setup;
 import au.gov.ga.geodesy.domain.model.SetupRepository;
 import au.gov.ga.geodesy.domain.model.SetupType;
+import au.gov.ga.geodesy.domain.service.SetupService;
 import au.gov.ga.geodesy.support.utils.GMLDateUtils;
 
 @RepositoryRestController
@@ -42,6 +44,18 @@ public class SetupEndpoint {
 
     @Autowired
     private PagedResourcesAssembler<Setup> assembler;
+
+    @Autowired
+    private SetupService setupService;
+
+    @PreAuthorize("hasRole('superuser')")
+    @RequestMapping(
+        value = "/request/updateSetups",
+        method = RequestMethod.PUT)
+
+    public void updateSetups() {
+        setupService.updateSetups();
+    }
 
     @RequestMapping(
         value = "/search/findByFourCharacterId",
