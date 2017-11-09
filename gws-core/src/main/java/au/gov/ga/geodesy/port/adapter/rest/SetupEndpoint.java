@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import au.gov.ga.geodesy.domain.model.CorsSite;
 import au.gov.ga.geodesy.domain.model.CorsSiteRepository;
@@ -52,6 +53,7 @@ public class SetupEndpoint {
     @RequestMapping(
         value = "/request/updateSetups",
         method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
 
     public void updateSetups() {
         setupService.updateSetups();
