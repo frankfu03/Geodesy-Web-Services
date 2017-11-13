@@ -63,9 +63,9 @@ public class SetupService {
      * Delete equipment setups for all CORS sites.
      */
     public void deleteSetups() {
-        setups.deleteAll();
-        equipmentConfigurations.deleteAll();
-        equipment.deleteAll();
+        setups.deleteAllInBatch();
+        equipmentConfigurations.deleteAllInBatch();
+        equipment.deleteAllInBatch();
     }
 
     /**

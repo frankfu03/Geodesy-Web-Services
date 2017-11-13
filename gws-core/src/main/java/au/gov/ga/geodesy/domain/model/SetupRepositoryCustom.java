@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Ad-hoc methods for retreiving Setups.
+ * Ad-hoc methods for querying and updating Setups.
  */
 public interface SetupRepositoryCustom {
 
@@ -19,4 +19,9 @@ public interface SetupRepositoryCustom {
      * Find all Setups at a Site for a period of interest.
      */
     Page<Setup> findBySiteIdAndPeriod(Integer siteId, SetupType type, Instant periodStart, Instant periodEnd, Pageable pageRequest);
+
+    /**
+     * Delete all Setups and associated EquipmentInUse objects.
+     */
+    void deleteAllInBatch();
 }

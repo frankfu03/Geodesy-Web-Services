@@ -81,4 +81,12 @@ public class SetupRepositoryImpl implements SetupRepositoryCustom {
 
         return setups.findAll(requiredSetupPredicate, pageReuest);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void deleteAllInBatch() {
+        entityManager.createQuery("delete from EquipmentInUse").executeUpdate();
+        entityManager.createQuery("delete from Setup").executeUpdate();
+    }
 }
