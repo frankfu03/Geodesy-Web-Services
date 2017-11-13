@@ -3,6 +3,9 @@ package au.gov.ga.geodesy.domain.service;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +53,9 @@ public class SetupService {
     @Autowired
     private EquipmentRepository equipment;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     /**
      * Update equipment setups for all CORS sites.
      */
@@ -76,7 +82,11 @@ public class SetupService {
      * Create equipment setups for all CORS sites.
      */
     public void createSetups() {
-        corsSites.findAll().forEach(this::createSetups);
+        corsSites.findAll().forEach(site -> {
+            createSetups(site);
+            entityManager.flush();
+            entityManager.clear();
+        });
     }
 
     /**
