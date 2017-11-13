@@ -91,7 +91,7 @@ public class SetupService {
 
             oldSetups.forEach(s -> {
                     s.invalidate();
-                    log.info("Invalidated site : " + s.getId());
+                    log.info("Invalidated setup : " + s.getId());
                 });
 
             setups.save(oldSetups);
