@@ -90,9 +90,9 @@ public class SetupService {
             oldSetups.removeAll(commonSetups);
 
             oldSetups.forEach(s -> {
-                    s.invalidate();
-                    log.info("Invalidated setup : " + s.getId());
-                });
+                s.invalidate();
+                log.info("Invalidated setup : " + s.getId());
+            });
 
             setups.save(oldSetups);
             setups.save(newSetups);
