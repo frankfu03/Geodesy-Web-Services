@@ -94,7 +94,8 @@ public class SetupService {
      */
     public void createSetups(CorsSite site) {
         Integer siteId = site.getId();
-        SiteLog siteLog = siteLogs.findByFourCharacterId(site.getFourCharacterId());
+        String fourCharId = site.getFourCharacterId();
+        SiteLog siteLog = siteLogs.findByFourCharacterId(fourCharId);
         HashMap<SetupType, List<Setup>> setupsByType = setupFactory.createSetups(siteId, siteLog);
         setupsByType.forEach((setupType, newSetups) -> {
             List<Setup> oldSetups = setups.findBySiteId(siteId, setupType);
@@ -111,6 +112,7 @@ public class SetupService {
             setups.save(oldSetups);
             setups.save(newSetups);
         });
+        log.info("Generated setups for site " + fourCharId);
     }
 }
 
