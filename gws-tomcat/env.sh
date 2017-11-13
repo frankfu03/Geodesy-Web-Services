@@ -21,3 +21,5 @@ function wait_for_tomcat {
         sleep 10
     done
 }
+
+set +e
