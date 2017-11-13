@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,6 +82,7 @@ public class SiteLogEndpoint {
     @Autowired
     private EndpointSecurity endpointSecurity;
 
+    @Transactional
     @RequestMapping(
         value = "/search/findByFourCharacterId",
         method = RequestMethod.GET,
@@ -104,6 +106,7 @@ public class SiteLogEndpoint {
         }
     }
 
+    @Transactional
     @RequestMapping(
         value = "/search/findByFourCharacterId",
         method = RequestMethod.GET,
