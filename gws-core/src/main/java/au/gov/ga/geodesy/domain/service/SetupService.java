@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 
 import au.gov.ga.geodesy.domain.model.CorsSite;
 import au.gov.ga.geodesy.domain.model.CorsSiteRepository;
@@ -54,9 +55,12 @@ public class SetupService {
      */
     @Async
     public void updateSetups() {
+        StopWatch w = new StopWatch();
+        w.start();
         this.deleteSetups();
         this.createSetups();
-        log.info("Updated all setups.");
+        w.stop();
+        log.info("Updated all setups in " + w.getTotalTimeSeconds() + " seconds.");
     }
 
     /**
