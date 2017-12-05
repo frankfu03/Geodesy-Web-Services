@@ -23,6 +23,7 @@ import au.gov.ga.geodesy.domain.model.SetupRepository;
 import au.gov.ga.geodesy.domain.model.SetupType;
 import au.gov.ga.geodesy.domain.model.equipment.EquipmentConfigurationRepository;
 import au.gov.ga.geodesy.domain.model.equipment.EquipmentRepository;
+import au.gov.ga.geodesy.domain.model.equipment.HumiditySensorRepository;
 import au.gov.ga.geodesy.domain.model.sitelog.SiteLog;
 import au.gov.ga.geodesy.domain.model.sitelog.SiteLogRepository;
 
@@ -53,6 +54,9 @@ public class SetupService {
     @Autowired
     private EquipmentRepository equipment;
 
+    @Autowired
+    private HumiditySensorRepository humiditySensors;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -75,6 +79,11 @@ public class SetupService {
     public void deleteSetups() {
         setups.deleteAllInBatch();
         equipmentConfigurations.deleteAllInBatch();
+
+        // TODO: Remove in the next release to production, because humidity sensors are
+        // no longer created as part of CorsSetups.
+        humiditySensors.deleteAllInBatch();
+
         equipment.deleteAllInBatch();
     }
 
