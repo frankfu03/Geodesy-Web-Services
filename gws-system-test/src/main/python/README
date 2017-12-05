@@ -1,0 +1,1 @@
+Building python bindings for jq will require autoconf, automake, and GNU M4.
