@@ -49,7 +49,7 @@
 
 7) Set `OAuth2 Token Signing Algorithm` to `RS256`
 
-8) Set `Token Signing RSA public/private key pair to `tokenSigningKeypair`
+8) Set `Token Signing RSA public/private key pair to jwtSigningKey`
 
 9) Turn on `Always return claims in ID Tokens`
 
