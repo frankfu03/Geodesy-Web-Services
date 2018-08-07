@@ -1,5 +1,6 @@
 package au.gov.ga.geodesy.support.mapper.orika.geodesyml;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Set;
@@ -266,6 +267,24 @@ public class GenericMapper {
                         dateRemoved.setIndeterminatePosition(TimeIndeterminateValueType.UNKNOWN);
                         antennaType.setDateRemoved(dateRemoved);
                     }
+                    antennaType.setMarkerArpUpEcc(this.roundArpEcc(antennaType.getMarkerArpUpEcc()));
+                    antennaType.setMarkerArpNorthEcc(this.roundArpEcc(antennaType.getMarkerArpNorthEcc()));
+                    antennaType.setMarkerArpEastEcc(this.roundArpEcc(antennaType.getMarkerArpEastEcc()));
+                }
+
+                @Override
+                public void mapBtoA(GnssAntennaType antennaType, GnssAntennaLogItem antennaLogItem, MappingContext ctx) {
+                    antennaLogItem.setMarkerArpUpEcc(this.roundArpEcc(antennaLogItem.getMarkerArpUpEcc()));
+                    antennaLogItem.setMarkerArpNorthEcc(this.roundArpEcc(antennaLogItem.getMarkerArpNorthEcc()));
+                    antennaLogItem.setMarkerArpEastEcc(this.roundArpEcc(antennaLogItem.getMarkerArpEastEcc()));
+                }
+
+                private Double roundArpEcc(Double x) {
+                    return this.round(x, 4);
+                }
+
+                private Double round(Double x, int scale) {
+                    return BigDecimal.valueOf(x).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
                 }
             })
             .register();

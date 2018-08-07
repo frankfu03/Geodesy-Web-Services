@@ -5,7 +5,7 @@
     <name>Geodesy Web Services System Tests</name>
     <groupId>au.gov.ga.geodesy.gws</groupId>
     <artifactId>gws-system-test</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <packaging>jar</packaging>
     <scm>
         <connection>scm:git:git@github.com:GeoscienceAustralia/geodesy-web-services.git</connection>
@@ -15,7 +15,7 @@
     <parent>
         <groupId>au.gov.ga.geodesy.gws</groupId>
         <artifactId>gws-parent</artifactId>
-        <version>0.1.3</version>
+        <version>0.1.4</version>
         <relativePath>../gws-parent</relativePath>
     </parent>
     <properties>
