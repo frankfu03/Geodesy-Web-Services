@@ -267,16 +267,29 @@ public class GenericMapper {
                         dateRemoved.setIndeterminatePosition(TimeIndeterminateValueType.UNKNOWN);
                         antennaType.setDateRemoved(dateRemoved);
                     }
-                    antennaType.setMarkerArpUpEcc(this.roundArpEcc(antennaType.getMarkerArpUpEcc()));
-                    antennaType.setMarkerArpNorthEcc(this.roundArpEcc(antennaType.getMarkerArpNorthEcc()));
-                    antennaType.setMarkerArpEastEcc(this.roundArpEcc(antennaType.getMarkerArpEastEcc()));
+                    if (antennaType.getMarkerArpUpEcc() != null) {
+                        antennaType.setMarkerArpUpEcc(this.roundArpEcc(antennaType.getMarkerArpUpEcc()));
+                    }
+                    if (antennaType.getMarkerArpNorthEcc() != null) {
+                        antennaType.setMarkerArpNorthEcc(this.roundArpEcc(antennaType.getMarkerArpNorthEcc()));
+                    }
+                    if (antennaType.getMarkerArpEastEcc() != null) {
+                        antennaType.setMarkerArpEastEcc(this.roundArpEcc(antennaType.getMarkerArpEastEcc()));
+                    }
                 }
 
                 @Override
                 public void mapBtoA(GnssAntennaType antennaType, GnssAntennaLogItem antennaLogItem, MappingContext ctx) {
-                    antennaLogItem.setMarkerArpUpEcc(this.roundArpEcc(antennaLogItem.getMarkerArpUpEcc()));
-                    antennaLogItem.setMarkerArpNorthEcc(this.roundArpEcc(antennaLogItem.getMarkerArpNorthEcc()));
-                    antennaLogItem.setMarkerArpEastEcc(this.roundArpEcc(antennaLogItem.getMarkerArpEastEcc()));
+
+                    if (antennaLogItem.getMarkerArpUpEcc() != null) {
+                        antennaLogItem.setMarkerArpUpEcc(this.roundArpEcc(antennaLogItem.getMarkerArpUpEcc()));
+                    }
+                    if (antennaLogItem.getMarkerArpNorthEcc() != null) {
+                        antennaLogItem.setMarkerArpNorthEcc(this.roundArpEcc(antennaLogItem.getMarkerArpNorthEcc()));
+                    }
+                    if (antennaLogItem.getMarkerArpEastEcc() != null) {
+                        antennaLogItem.setMarkerArpEastEcc(this.roundArpEcc(antennaLogItem.getMarkerArpEastEcc()));
+                    }
                 }
 
                 private Double roundArpEcc(Double x) {
