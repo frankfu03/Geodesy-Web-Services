@@ -43,9 +43,9 @@ public class GnssAntennaMapperTest extends UnitTest {
                         .withValue("LEICA GRX1200GGPRO"))
                 .withManufacturerSerialNumber(serialNumber)
                 .withAntennaReferencePoint(new CodeType().withValue("NONE").withCodeSpace("eGeodesy/antennaReferencePoint"))
-                .withMarkerArpUpEcc(0.0)
-                .withMarkerArpNorthEcc(0.0)
-                .withMarkerArpEastEcc(0.0)
+                .withMarkerArpUpEcc(0.00015)
+                .withMarkerArpNorthEcc(0.1)
+                .withMarkerArpEastEcc(0.2)
                 .withAlignmentFromTrueNorth(0.0)
                 .withAntennaRadomeType(igsRadomeModelCodeType)
                 .withAntennaCableLength(12.0)
@@ -59,7 +59,7 @@ public class GnssAntennaMapperTest extends UnitTest {
         assertThat(logItem.getSerialNumber(), is(antenna.getManufacturerSerialNumber()));
         assertThat(logItem.getMarkerArpEastEcc(), is(antenna.getMarkerArpEastEcc()));
         assertThat(logItem.getMarkerArpNorthEcc(), is(antenna.getMarkerArpNorthEcc()));
-        assertThat(logItem.getMarkerArpUpEcc(), is(antenna.getMarkerArpUpEcc()));
+        assertThat(logItem.getMarkerArpUpEcc(), is(0.0002));
         assertThat(logItem.getAlignmentFromTrueNorth(), is(String.valueOf(antenna.getAlignmentFromTrueNorth())));
         assertThat(logItem.getAntennaRadomeType(), is(antenna.getAntennaRadomeType().getValue()));
         assertThat(logItem.getAntennaCableLength(), is(String.valueOf(antenna.getAntennaCableLength())));
@@ -74,7 +74,7 @@ public class GnssAntennaMapperTest extends UnitTest {
         assertThat(antennaB.getAntennaReferencePoint(), is(antenna.getAntennaReferencePoint()));
         assertThat(antennaB.getMarkerArpEastEcc(), is(antenna.getMarkerArpEastEcc()));
         assertThat(antennaB.getMarkerArpNorthEcc(), is(antenna.getMarkerArpNorthEcc()));
-        assertThat(antennaB.getMarkerArpUpEcc(), is(antenna.getMarkerArpUpEcc()));
+        assertThat(antennaB.getMarkerArpUpEcc(), is(0.0002));
         assertThat(antennaB.getAlignmentFromTrueNorth(), is(antenna.getAlignmentFromTrueNorth()));
         assertThat(antennaB.getAntennaRadomeType(), is(antenna.getAntennaRadomeType()));
         assertThat(antennaB.getAntennaCableLength(), is(antenna.getAntennaCableLength()));
