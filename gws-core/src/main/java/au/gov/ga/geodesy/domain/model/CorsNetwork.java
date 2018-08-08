@@ -13,7 +13,7 @@ import javax.persistence.Version;
 public class CorsNetwork {
 
     @Version
-    private Integer version;
+    private Integer version = 0;
 
     /**
      * RDBMS surrogate key
