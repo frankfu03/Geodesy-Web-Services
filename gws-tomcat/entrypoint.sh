@@ -9,4 +9,6 @@ if [ -d /webapps ]; then
     rsync --ignore-missing-args -ur /webapps/ "${TOMCAT_HOME}"/webapps/
 fi
 
+set +e
+
 exec "$@"

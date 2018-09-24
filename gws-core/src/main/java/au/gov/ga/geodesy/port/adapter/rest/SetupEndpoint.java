@@ -17,16 +17,20 @@ import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import au.gov.ga.geodesy.domain.model.CorsSite;
 import au.gov.ga.geodesy.domain.model.CorsSiteRepository;
 import au.gov.ga.geodesy.domain.model.Setup;
 import au.gov.ga.geodesy.domain.model.SetupRepository;
+import au.gov.ga.geodesy.domain.model.SetupType;
+import au.gov.ga.geodesy.domain.service.SetupService;
 import au.gov.ga.geodesy.support.utils.GMLDateUtils;
 
 @RepositoryRestController
@@ -42,6 +46,19 @@ public class SetupEndpoint {
     @Autowired
     private PagedResourcesAssembler<Setup> assembler;
 
+    @Autowired
+    private SetupService setupService;
+
+    @PreAuthorize("hasRole('superuser')")
+    @RequestMapping(
+        value = "/request/updateSetups",
+        method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+
+    public void updateSetups() {
+        setupService.updateSetups();
+    }
+
     @RequestMapping(
         value = "/search/findByFourCharacterId",
         method = RequestMethod.GET,
@@ -49,6 +66,7 @@ public class SetupEndpoint {
 
     public ResponseEntity<PagedResources<Resource<Setup>>> findByFourCharacterId(
             @RequestParam("id") String fourCharId,
+            @RequestParam("type") SetupType type,
             @RequestParam(required = false) String effectiveFrom,
             @RequestParam(required = false) String effectiveTo,
             @RequestParam(defaultValue = "uuuu-MM-dd") String timeFormat,
@@ -59,7 +77,9 @@ public class SetupEndpoint {
         CorsSite site = sites.findByFourCharacterId(fourCharId);
 
         if (site != null) {
-            page = setups.findBySiteIdAndPeriod(site.getId(),
+            page = setups.findBySiteIdAndPeriod(
+                site.getId(),
+                type,
                 parse(effectiveFrom, timeFormat),
                 parse(effectiveTo, timeFormat),
                 pageRequest);
@@ -86,13 +106,14 @@ public class SetupEndpoint {
     @Transactional("geodesyTransactionManager")
     public ResponseEntity<PersistentEntityResource> findCurrentByFourCharacterId(
             @RequestParam("id") String fourCharId,
+            @RequestParam("type") SetupType type,
             PersistentEntityResourceAssembler assembler) {
 
         CorsSite site = sites.findByFourCharacterId(fourCharId);
         if (site == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Setup setup = setups.findCurrentBySiteId(site.getId());
+        Setup setup = setups.findCurrentBySiteId(site.getId(), type);
         if (setup == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

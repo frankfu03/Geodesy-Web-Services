@@ -5,12 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
-import au.gov.ga.geodesy.domain.model.CorsSiteRepository;
-import au.gov.ga.geodesy.domain.model.NodeRepository;
-import au.gov.ga.geodesy.domain.model.SetupRepository;
-import au.gov.ga.geodesy.domain.model.equipment.EquipmentConfigurationRepository;
-import au.gov.ga.geodesy.domain.model.equipment.EquipmentRepository;
 import au.gov.ga.geodesy.domain.model.sitelog.SiteLogRepository;
+import au.gov.ga.geodesy.domain.service.SetupService;
 
 /**
  * Utilities that affect all repositories.
@@ -27,13 +23,7 @@ public class Repositories {
     private CorsSiteRepository sites;
 
     @Autowired
-    private SetupRepository setups;
-
-    @Autowired
-    private EquipmentRepository equipment;
-
-    @Autowired
-    private EquipmentConfigurationRepository equipmentConfiguration;
+    private SetupService setupService;
 
     @Autowired
     private NodeRepository nodes;
@@ -44,10 +34,8 @@ public class Repositories {
     public void deleteAll() {
         siteLogs.deleteAll();
         nodes.deleteAll();
-        setups.deleteAll();
+        setupService.deleteSetups();
         sites.deleteAll();
-        equipmentConfiguration.deleteAll();
-        equipment.deleteAll();
         log.info("Deleted all data");
     }
 }

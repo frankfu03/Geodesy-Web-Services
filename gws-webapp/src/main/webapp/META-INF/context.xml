@@ -14,7 +14,7 @@
             maxActive="40"
             maxWait="10000"
             removeAbandoned="true" 
-            removeAbandonedTimeout="120" 
+            removeAbandonedTimeout="600" 
             testOnBorrow="true"
             testOnReturn="false" 
             testWhileIdle="true"
